@@ -1,0 +1,37 @@
+<h1>Products</h1>
+<table>
+  <tr>
+    <th>Non-Cached List </th>
+    <th>Cached List</th>
+    <th>Simple Cached List </th>
+    <th>Russian Doll Cached List </th>
+  </tr>
+  <tr>
+    <td>
+      <ol>
+      <% @products.each do |product| %>
+        <% cache "product-#{product.id}" do %>
+            <li><%= product.title %> | <%= link_to 'Show', product %> </li>
+        <% end %>
+      <% end %>
+    </ol>
+    </td>
+    <td>
+      <ol>
+      <% @products.each do |product| %>
+        <li><%= product.title %> | <%= link_to 'Show', product %></li>
+      <% end %>
+    </ol>
+    </td>
+    <td>
+      <%= render :partial => 'list', object: @products, cached: true %>
+
+    </td>
+    <td>
+      <% cache "products" do %>
+      <!-- can use  cache_if and cache_unless methods above -->
+        <%= render :partial => 'list', object: @products, cached: true %>
+      <% end %>
+    </td>
+  </tr>
+</table>

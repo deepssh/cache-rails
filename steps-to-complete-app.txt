@@ -1,0 +1,32 @@
+rails new cache_for_rails -T
+Enable Development Mode: rake dev:cache
+config/environments/development.rb
+
+Add these lines in the above file:
+''''
+    if Rails.root.join('tmp/caching-dev.txt').exist?
+      config.action_controller.perform_caching = true
+      config.action_mailer.perform_caching = false
+      config.cache_store = :memory_store
+      config.public_file_server.headers = {
+        'Cache-Control' => 'public, max-age=172800'
+      }
+    else
+      config.action_controller.perform_caching = false
+      config.action_mailer.perform_caching = false
+      config.cache_store = :null_store
+    end
+''''
+
+Add the relevant gem
+gem 'actionpack-page_caching'
+
+Now, tweak your configuration file:
+config/application.rb
+with this line below,
+config.action_controller.page_cache_directory = "#{Rails.root.to_s}/public/deploy"
+
+This setting is needed to specify where to store your cached pages.
+
+
+gem 'actionpack-action_caching'
